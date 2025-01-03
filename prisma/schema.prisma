@@ -1,0 +1,93 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+type ContestInfo {
+  contestId String
+}
+
+type ProblemSetInfo {
+  problemId String
+}
+
+model testing {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  title     String
+  createdAt DateTime @default(now())
+}
+type Role{
+  User Boolean
+  Admin Boolean
+}
+// type Test_Type{
+//   input String
+//   output String
+// }
+model User {
+  id                      String           @id @default(auto()) @map("_id") @db.ObjectId
+  name                    String? 
+  age                     Int?
+  email                   String          @unique
+  password                String?
+  userName                String?           @unique
+  totalRank               Int?
+  noOfProblemSolved       Int?
+  solvedProblemDetails    ProblemSetInfo[]
+  noOfContestParticipated Int?
+  contestDetails          ContestInfo[]
+  gender                  String?
+  collegeName             String?
+  state                   String?
+  country                 String?
+  role                    Role?
+  googleLoginAccess       Boolean?
+}
+
+// model Problem_Set{
+//   id       String    @id @default(auto()) @map("_id") @db.ObjectId
+//   problem_no Int 
+//   like Int
+//   dislike Int
+
+// }
+type InputOutputType{
+  input String
+  output String
+}
+
+model ProblemSet{
+  id String @id @default(auto()) @db.ObjectId @map("_id")
+  problemNo Int @unique
+  problemName String 
+  description String
+  timeComplexity String
+  spaceComplexity String
+  companies String[]
+  like Int
+  dislike Int
+  sampleInputOutput InputOutputType[]
+  testcases InputOutputType[]
+  constraint String[]
+  topic String[]
+  accepted Int
+  submission Int
+  status String
+  contestProblem Boolean
+}
+model Contest{
+  id String @id @default(auto()) @db.ObjectId @map("_id")
+  contestNo Int @unique
+  contestName String 
+  duration Int
+  startTime DateTime
+  problems Int[]
+  status String
+  noOfParticipated Int
+}
+
